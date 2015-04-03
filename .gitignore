@@ -7,3 +7,4 @@ lang.lex.c
 lang.lex.o
 lang.y.o
 Makefile
+bescherelle.exe.stackdump

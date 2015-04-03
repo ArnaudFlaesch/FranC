@@ -47,25 +47,36 @@ extern int yydebug;
       know about them.  */
    enum yytokentype {
      NUMBER = 258,
-     PLUS = 259,
-     MIN = 260,
-     MULT = 261,
-     DIV = 262,
-     POW = 263,
-     OP_PAR = 264,
-     CL_PAR = 265,
-     COLON = 266,
-     EOL = 267,
-     OR = 268,
-     AND = 269,
-     NEQ = 270,
-     EQ = 271,
-     LET = 272,
-     GET = 273,
-     LT = 274,
-     GT = 275,
-     NOT = 276,
-     NEG = 277
+     VAR = 259,
+     EGAL = 260,
+     PLUS = 261,
+     MIN = 262,
+     MULT = 263,
+     DIV = 264,
+     POW = 265,
+     DISPLAY = 266,
+     SI = 267,
+     ALORS = 268,
+     SINON = 269,
+     TANTQUE = 270,
+     FAIRE = 271,
+     FIN = 272,
+     OP_PAR = 273,
+     CL_PAR = 274,
+     COLON = 275,
+     VRAI = 276,
+     FAUX = 277,
+     EOL = 278,
+     OR = 279,
+     AND = 280,
+     NEQ = 281,
+     EQUAL = 282,
+     LET = 283,
+     GET = 284,
+     LT = 285,
+     GT = 286,
+     NOT = 287,
+     NEG = 288
    };
 #endif
 
@@ -80,7 +91,7 @@ typedef union YYSTYPE
 
 
 /* Line 2058 of yacc.c  */
-#line 84 "lang.tab.h"
+#line 95 "lang.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

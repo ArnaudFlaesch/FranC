@@ -15,18 +15,25 @@ Node root;
     struct Node *node;
 }
 
-%token   <node> NUMBER 
+%token   <node> NUMBER VAR EGAL
 %token   <node> PLUS MIN MULT DIV POW
+%token   <node> DISPLAY SI ALORS SINON
+%token   <node> TANTQUE FAIRE
+%token   <node> FIN
 %token   OP_PAR CL_PAR COLON
+%token   <node> VRAI FAUX
 %token   EOL
 
 %type   <node> Instlist
 %type   <node> Inst
 %type   <node> Expr
+%type   <node> ExB
+%type   <node> Term
+%type   <node> Opr
 
 %left OR			// OU
 %left AND			// ET
-%left EQ NEQ   			// ==  et !=
+%left EQUAL NEQ                 // ==  et !=
 %left GT LT GET LET             // > , < , >= et <=
 %left PLUS  MIN			// + et -
 %left MULT  DIV                 // * et /
@@ -37,7 +44,7 @@ Node root;
 %%
 
 Input:
-               {/* Nothing ... */ }
+               { /* Nothing ... */ }
   | Line Input { /* Nothing ... */ }
 
 
@@ -52,19 +59,41 @@ Instlist:
 ;
 
 Inst:
-    Expr COLON { $$ = $1; } 
+    Expr COLON                                          { $$ = $1; }
+    | DISPLAY OP_PAR Expr CL_PAR COLON                  { $$ = nodeChildren($1, createNode(NTEMPTY), $3); }
+    | VAR EGAL Expr COLON                               { $$ = nodeChildren($2, $1, $3); }
+    | SI ExB ALORS Instlist FIN COLON                   { $$ = nodeChildren($1, $2, nodeChildren($3, $4, $5 ) ); }
+    | SI ExB ALORS Instlist SINON Instlist FIN COLON    { $$ = nodeChildren($1, $2, nodeChildren ($3, $4, nodeChildren ($5, $6, $7) ) ); }
+    | TANTQUE ExB FAIRE Instlist FIN COLON              { $$ = nodeChildren($1, $2, nodeChildren ($3, $4, $5) ); }
 ;
 
 Expr:
     NUMBER				   	{ $$ = $1; }
-  | Expr PLUS Expr     			{ $$ = nodeChildren($2, $1, $3); }
-  | Expr MIN Expr   			{ $$ = nodeChildren($2, $1, $3); }
-  | Expr MULT Expr    			{ $$ = nodeChildren($2, $1, $3); }
-  | Expr DIV Expr      			{ $$ = nodeChildren($2, $1, $3); }
-  | MIN Expr %prec NEG 			{ $$ = nodeChildren($1, createNode(NTEMPTY), $2); }
-  | Expr POW Expr      			{ $$ = nodeChildren($2, $1, $3); }
-  | OP_PAR Expr CL_PAR { $$ = $2; }
-  ;
+    | VAR                                       
+    | Expr PLUS Expr     			{ $$ = nodeChildren($2, $1, $3); }
+    | Expr MIN Expr                             { $$ = nodeChildren($2, $1, $3); }
+    | Expr MULT Expr    			{ $$ = nodeChildren($2, $1, $3); }
+    | Expr DIV Expr      			{ $$ = nodeChildren($2, $1, $3); }
+    | MIN Expr %prec NEG 			{ $$ = nodeChildren($1, createNode(NTEMPTY), $2); }
+    | Expr POW Expr      			{ $$ = nodeChildren($2, $1, $3); }
+    | OP_PAR Expr CL_PAR                        { $$ = $2; }
+;
+
+Term:
+    VAR                                         { $$ = $1; }
+    | NUMBER                                    { $$ = $1; }
+;
+
+Opr:
+    
+;
+
+ExB:
+    Term                                        { $$ = $1; }
+    | ExB Opr ExB                               { $$ = nodeChildren($2, $1, $3); }
+    | VRAI                                      { $$ = $1; }
+    | FAUX                                      { $$ = $1; }
+;
 
 %%
 

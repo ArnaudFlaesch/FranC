@@ -6,14 +6,30 @@ enum NodeType {
     NTINSTLIST = 1,
 
     NTNUM   = 201,
-    NTCAR   = 202, 
+    NTVAR   = 202,
+    
+    NTDISPLAY = 203,
 
     NTPLUS  = 321,
     NTMIN   = 322,
     NTMULT  = 323,
     NTDIV   = 324,
-    NTPOW   = 325,	
-	
+    NTPOW   = 325,
+    NTEGAL  = 326,
+    
+    NTVRAI  = 331,
+    NTFAUX  = 332,
+    
+    NTEQUAL = 340,
+    
+    NTSI = 350,
+    NTALORS = 351,
+    NTSINON = 352,
+    
+    NTTANTQUE = 360,
+    NTFAIRE = 361,
+    
+    NTFIN = 370
 };
    
 typedef struct Node {
@@ -24,11 +40,6 @@ typedef struct Node {
         struct Node** children;
     } ;
 } Node;
-
-typedef struct Variables {
-    int value;
-    char * name;
-} Variables;
 
 Node* createNode(int type);
 

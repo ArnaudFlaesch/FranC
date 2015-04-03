@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "tree.h"
 
-# define PRINTTAB 2
+#define PRINTTAB 2
 
 Node* createNode(int type) {
     Node* newnode = (Node *) malloc(sizeof(Node));
@@ -22,25 +22,38 @@ Node* nodeChildren(Node* father, Node *child1, Node *child2) {
 /**
  * Cette fonction convertit les int des Node en string afin d'afficher l'arbre avec la fonction printGraphRec.
  */
-
 const char* node2String(Node *node) {	
     char *res;
     switch ( node->type ) {
         case NTEMPTY:    return "NTEMPTY";
         case NTINSTLIST: return "NTINSTLIST";
 
+        case NTVAR:
+            res = (char *)malloc(sizeof(char) * 32);
+            sprintf(res, "NTVAR -> %s", node->var);
+            return res;
         case NTNUM:
             res = (char *)malloc(sizeof(char) * 32);
-            sprintf(res, "NTNUM -> %f", node->val);
+            sprintf(res, "NTNUM -> %.2f", node->val);
             return res;
 
-        case NTPLUS:  return "NTPLUS";
-        case NTMIN:   return "NTMIN";
-        case NTMULT:  return "NTMULT";
-        case NTDIV:   return "NTDIV";
-        case NTPOW:   return "NTPOW";
+        case NTPLUS:    return "NTPLUS";
+        case NTMIN:     return "NTMIN";
+        case NTMULT:    return "NTMULT";
+        case NTDIV:     return "NTDIV";
+        case NTPOW:     return "NTPOW";
+        case NTEGAL:    return "NTEGAL";
+        case NTDISPLAY: return "NTDISPLAY";
+        case NTSI:      return "NTSI";
+        case NTALORS:   return "NTALORS";
+        case NTSINON:   return "NTSINON";
+        case NTTANTQUE: return "NTTANTQUE";
+        case NTFAIRE:   return "NTFAIRE";
+        case NTFIN:     return "NTFIN";
+        case NTVRAI:    return "NTVRAI";
+        case NTFAUX:    return "NTFAUX";
 
-        default: return "UNK";
+        default: printf("%f",node->type); return "UNK";
     };
 }
 
@@ -67,7 +80,7 @@ void printGraphRec(Node *node, int depth, int fdepth) {
     printf("%s%s\n", makeSpaces(depth, fdepth), node2String(node));
 	
     // Hack : No children only if null or number 
-    if ( (node->children != NULL) && (node->type != NTNUM) ) {
+    if ( (node->children != NULL) && (node->type != NTNUM) && (node->type != NTVAR) ) {
         printGraphRec(node->children[0], depth + 1, depth);
         printGraphRec(node->children[1], depth + 1, depth);
     }

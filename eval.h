@@ -1,6 +1,6 @@
 #ifndef EVAL
 #define EVAL
 
-double eval(Node *node);
+void eval(Node *node);
 
 #endif

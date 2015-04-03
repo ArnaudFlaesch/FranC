@@ -12,7 +12,6 @@ win_bison -d lang.y
 rename  lang.tab.c lang.y.c
 rename lang.tab.h lang.h
 win_flex lang.l
-win_flex lang.l
 rename  lex.yy.c lang.lex.c
 gcc -c tree.c -o tree.o
 gcc -c eval.c -o eval.o
