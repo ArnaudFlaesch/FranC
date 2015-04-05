@@ -6,13 +6,10 @@
 #include "tree.h"
 #include "eval.h"
 
-double tabVar[26]={0.0};
-
 tabVariable * tab = NULL;
 
 int printDepth = 0;
 int funcDepth = 0;
-int rang=0;
 double valeur=0.0;
 
 /**
@@ -20,11 +17,11 @@ double valeur=0.0;
  * Si elle rencontre un opérateur, elle calcule le résultat des 2 valeurs de ses expressions (4 + 1 + x) ou variables (x, y, etc.)
  * Si elle recontre un nombre ou une variable, elle retourne sa valeur.
  */
-double evalExpr(Node *node) {
+float evalExpr(Node *node) {
     switch ( node->type ) {
-        case NTEMPTY:  return 0.0;
+        case NTEMPTY: return 0.0;
         case NTNUM: return node->val;
-        case NTVAR : return tabVar[(node->var)[0]-'a'];
+        case NTVAR : return getVar(tab, node->var);
         case NTPLUS: return evalExpr(node->children[0])
                         + evalExpr(node->children[1]);
         case NTMIN: return evalExpr(node->children[0])
@@ -85,14 +82,17 @@ int evalInst(Node* node) {
 	case NTMULT:
 	case NTDIV:
 	case NTPOW:
-            printf("%.2f\n", evalExpr(node));
+            printf("%.2f\n",evalExpr(node));
+            return;
+        case NTPLUSPLUS:
+            valeur = getVar(tab, node->children[1]->var) +1;
+            printf("%s vaut %.2f\n",(node->children[1]->var), valeur);
+            tab = tabVariable_append(tab, node->children[1]->var, valeur );
             return;
             
         case NTAFF:
-            rang=(node->children[0]->var)[0]-'a';
             valeur = evalExpr(node->children[1]);
-            printf("%s vaut %.2f\n",(node->children[0]->var), valeur);
-            tabVar[rang] = valeur;
+            printf("%s égal %.2f\n",(node->children[0]->var), valeur);
             tab = tabVariable_append(tab, node->children[0]->var, valeur );
             return;
             
@@ -113,12 +113,26 @@ int evalInst(Node* node) {
             }
             return(0);
             
+        case NTFAIRE:
+            if (evalExpB(node->children[0]) == 1) {
+                evalInst(node->children[1]->children[1]);
+                evalInst(node->children[1]->children[0]);
+                evalInst(node);
+            }
+            return;
+            
+        case NTPOUR:
+            evalInst(node->children[0]);
+            evalInst(node->children[1]);
+            return;
+            
         case NTTANTQUE:
             if (evalExpB(node->children[0]) == 1) {
                 evalInst(node->children[1]);
                 evalInst(node);
             }
             return;
+            
 	default:
             printf("Error in evalInst ... Wrong node type: %s\n", node2String(node));
             exit(1);
@@ -126,8 +140,12 @@ int evalInst(Node* node) {
 }
 
 void eval(Node *node) {
+    printf("\nEvaluation de l'instruction :\n");
     evalInst(node);
+    printf("\nAffichage de l'arbre de syntaxe :\n");
+    printGraph(node);
     afficheTabVar(tab);
+    printf("\n");
 }
 
 tabVariable * tabVariable_create(char * variable, float value) {
@@ -145,13 +163,18 @@ tabVariable * tabVariable_append(tabVariable * tab, char * variable, float value
         while (tab->next != NULL) {
             if (strcmp(tab->variable, variable) == 0) {
                 tab->value = value;
-                return (save);
+                return save;
             }
             else {
                tab = tab->next; 
             }
         }
-        tab->next = tabNode;
+        if (strcmp(tab->variable, variable) == 0) {
+            tab->value = value;
+        }
+        else {
+            tab->next = tabNode;
+        }
         return save;
     }
     else {
@@ -160,8 +183,24 @@ tabVariable * tabVariable_append(tabVariable * tab, char * variable, float value
 }
 
 void afficheTabVar(tabVariable * tab) {
+    if (tab != NULL) {
+        printf("\nAffichage du tableau contenant les valeurs associées aux variables :\n");
+    }
     while (tab != NULL) {
         printf("%s = %.2f \n", tab->variable, tab->value);
         tab = tab->next;
     }
+}
+
+float getVar(tabVariable * tab, char * variable) {
+    while (tab != NULL) {
+        if (strcmp(tab->variable, variable) == 0) {
+            return (tab->value);
+        }
+        else {
+            tab = tab->next;
+        }
+    }
+    printf("ERREUR : Variable %s non initialisée ! \n", variable);
+    exit(1);
 }

@@ -41,6 +41,7 @@ ALORS { yylval.node = createNode(NTALORS); return (ALORS); }
 SINON { yylval.node = createNode(NTSINON); return (SINON); }
 FIN { yylval.node = createNode(NTFIN); return (FIN); }
 
+POUR { yylval.node = createNode(NTPOUR); return (POUR); }
 TANTQUE { yylval.node = createNode(NTTANTQUE); return (TANTQUE); }
 FAIRE { yylval.node = createNode(NTFAIRE); return (FAIRE); }
 
@@ -62,7 +63,7 @@ FAUX { yylval.node = createNode(NTFAUX); return (FAUX); }
 "<="  { yylval.node = createNode(NTLET); return (LET); }
 "OU"  { yylval.node = createNode(NTOU); return (OU); }
 "ET"  { yylval.node = createNode(NTET); return (ET); }
-
+"++"  { yylval.node = createNode(NTPLUSPLUS); return(PLUSPLUS); }
 ";"    { return(COLON); }
 
 "\n"   { return(EOL); }

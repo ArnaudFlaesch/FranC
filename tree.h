@@ -16,6 +16,7 @@ enum NodeType {
     NTDIV   = 324,
     NTPOW   = 325,
     NTAFF  = 326,
+    NTPLUSPLUS = 327,
     
     NTVRAI  = 331,
     NTFAUX  = 332,
@@ -34,10 +35,12 @@ enum NodeType {
     NTALORS = 351,
     NTSINON = 352,
     
+    NTPOUR = 359,
     NTTANTQUE = 360,
     NTFAIRE = 361,
     
     NTFIN = 370
+    
 };
    
 typedef struct Node {

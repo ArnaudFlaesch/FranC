@@ -44,11 +44,13 @@ const char* node2String(Node *node) {
         case NTPOW:     return "NTPOW";
         
         case NTAFF:     return "NTAFF";
+        case NTPLUSPLUS:return "NTPLUSPLUS";
         case NTDISPLAY: return "NTDISPLAY";
         
         case NTSI:      return "NTSI";
         case NTALORS:   return "NTALORS";
         case NTSINON:   return "NTSINON";
+        case NTPOUR:    return "NTPOUR";
         case NTTANTQUE: return "NTTANTQUE";
         case NTFAIRE:   return "NTFAIRE";
         case NTFIN:     return "NTFIN";

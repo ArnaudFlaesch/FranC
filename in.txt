@@ -8,3 +8,4 @@ SI (x < 1993 ET x == 1993) ALORS x = 5+5+5+5+5; SINON x = 10; FIN;
 SI FAUX ALORS x = 4+4; FIN;
 SI VRAI ALORS x = 4+1; SINON x = 10 + 10; FIN;
 TANTQUE x < 10 FAIRE AFFICHER(x); x = x+1; FIN;
+POUR x = 0; x < 5; x++; FAIRE AFFICHER(x); FIN;
