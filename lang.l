@@ -11,7 +11,7 @@ blank [ \t]+
 
 chiffre     [0-9]
 nombre      {chiffre}+
-mot         [a-zA-Z]
+variable    [a-z]+[a-zA-Z0-9]*
 exposant    [eE][+-]?{nombre}
 real        {nombre}("."{nombre})?{exposant}?
 
@@ -22,16 +22,16 @@ real        {nombre}("."{nombre})?{exposant}?
 "("   return(OP_PAR);
 ")"   return(CL_PAR);
 
+{variable} {
+    yylval.node = createNode(NTVAR);
+    yylval.node->var = strdup(yytext);
+    return(VAR);
+}
+
 {real} {
     yylval.node = createNode(NTNUM);
     yylval.node->val = atof(yytext);
     return(NUMBER);
-}
-
-{mot} {
-    yylval.node = createNode(NTVAR); printf("Affectation d'une variable : \n");
-    yylval.node->var = strdup(yytext);
-    return(VAR);
 }
 
 AFFICHER { yylval.node = createNode(NTDISPLAY); return (DISPLAY); }
@@ -52,8 +52,17 @@ FAUX { yylval.node = createNode(NTFAUX); return (FAUX); }
 "*"   { yylval.node = createNode(NTMULT); return(MULT); }
 "/"   { yylval.node = createNode(NTDIV); return(DIV); }
 "^"   { yylval.node = createNode(NTPOW); return(POW); }
-"="   { yylval.node = createNode(NTEGAL); return(EGAL); }
+"="   { yylval.node = createNode(NTAFF); return(AFF); }
+"!"   { yylval.node = createNode(NTNOT); return (NOT); }
 "=="  { yylval.node = createNode(NTEQUAL); return (EQUAL); }
+"!="  { yylval.node = createNode(NTNEQUAL); return (NEQUAL); }
+">"   { yylval.node = createNode(NTGT); return (GT); }
+"<"   { yylval.node = createNode(NTLT); return (LT); }
+">="  { yylval.node = createNode(NTGET); return (GET); }
+"<="  { yylval.node = createNode(NTLET); return (LET); }
+"OU"  { yylval.node = createNode(NTOU); return (OU); }
+"ET"  { yylval.node = createNode(NTET); return (ET); }
+
 ";"    { return(COLON); }
 
 "\n"   { return(EOL); }

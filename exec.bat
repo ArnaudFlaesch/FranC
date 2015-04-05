@@ -18,5 +18,5 @@ gcc -c eval.c -o eval.o
 gcc -c lang.lex.c -o lang.lex.o
 gcc -c lang.y.c -o lang.y.o
 gcc -o bescherelle lang.lex.o lang.y.o tree.o eval.o 
-bescherelle -f "in.txt"
+bescherelle -f "test.txt"
 pause

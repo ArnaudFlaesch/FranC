@@ -15,13 +15,21 @@ enum NodeType {
     NTMULT  = 323,
     NTDIV   = 324,
     NTPOW   = 325,
-    NTEGAL  = 326,
+    NTAFF  = 326,
     
     NTVRAI  = 331,
     NTFAUX  = 332,
     
+    NTNOT = 339,
     NTEQUAL = 340,
-    
+    NTNEQUAL = 341,
+    NTGT = 342,
+    NTLT = 343,
+    NTGET = 344,
+    NTLET = 345,
+    NTOU = 346,
+    NTET = 347,
+            
     NTSI = 350,
     NTALORS = 351,
     NTSINON = 352,

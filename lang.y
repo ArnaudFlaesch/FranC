@@ -15,8 +15,10 @@ Node root;
     struct Node *node;
 }
 
-%token   <node> NUMBER VAR EGAL
+%token   <node> NUMBER VAR AFF
 %token   <node> PLUS MIN MULT DIV POW
+%token   <node> NOT EQUAL NEQUAL GT LT GET LET
+%token   <node> OU ET
 %token   <node> DISPLAY SI ALORS SINON
 %token   <node> TANTQUE FAIRE
 %token   <node> FIN
@@ -29,11 +31,10 @@ Node root;
 %type   <node> Expr
 %type   <node> ExB
 %type   <node> Term
-%type   <node> Opr
 
-%left OR			// OU
-%left AND			// ET
-%left EQUAL NEQ                 // ==  et !=
+%left OU			// OU Logique
+%left ET			// ET Logique
+%left EQUAL NEQUAL              // ==  et !=
 %left GT LT GET LET             // > , < , >= et <=
 %left PLUS  MIN			// + et -
 %left MULT  DIV                 // * et /
@@ -61,15 +62,15 @@ Instlist:
 Inst:
     Expr COLON                                          { $$ = $1; }
     | DISPLAY OP_PAR Expr CL_PAR COLON                  { $$ = nodeChildren($1, createNode(NTEMPTY), $3); }
-    | VAR EGAL Expr COLON                               { $$ = nodeChildren($2, $1, $3); }
-    | SI ExB ALORS Instlist FIN COLON                   { $$ = nodeChildren($1, $2, nodeChildren($3, $4, $5 ) ); }
-    | SI ExB ALORS Instlist SINON Instlist FIN COLON    { $$ = nodeChildren($1, $2, nodeChildren ($3, $4, nodeChildren ($5, $6, $7) ) ); }
-    | TANTQUE ExB FAIRE Instlist FIN COLON              { $$ = nodeChildren($1, $2, nodeChildren ($3, $4, $5) ); }
+    | VAR AFF Expr COLON                                { $$ = nodeChildren($2, $1, $3); }
+    | SI ExB ALORS Instlist FIN COLON                   { $$ = nodeChildren($1, $2, $4); }
+    | SI ExB ALORS Instlist SINON Instlist FIN COLON    { $$ = nodeChildren($5, nodeChildren($1, $2, $4), $6); }
+    | TANTQUE ExB FAIRE Instlist FIN COLON              { $$ = nodeChildren($1, $2, $4 ); }
 ;
 
 Expr:
     NUMBER				   	{ $$ = $1; }
-    | VAR                                       
+    | VAR                                        
     | Expr PLUS Expr     			{ $$ = nodeChildren($2, $1, $3); }
     | Expr MIN Expr                             { $$ = nodeChildren($2, $1, $3); }
     | Expr MULT Expr    			{ $$ = nodeChildren($2, $1, $3); }
@@ -82,17 +83,21 @@ Expr:
 Term:
     VAR                                         { $$ = $1; }
     | NUMBER                                    { $$ = $1; }
-;
-
-Opr:
-    
+    | VRAI                                      { $$ = $1; }
+    | FAUX                                      { $$ = $1; }
+    | Term EQUAL Term                           { $$ = nodeChildren($2, $1 ,$3); }
+    | Term NEQUAL Term                          { $$ = nodeChildren($2, $1 ,$3); }
+    | Term GT Term                              { $$ = nodeChildren($2, $1 ,$3); }
+    | Term LT Term                              { $$ = nodeChildren($2, $1 ,$3); }
+    | Term GET Term                             { $$ = nodeChildren($2, $1 ,$3); }
+    | Term LET Term                             { $$ = nodeChildren($2, $1 ,$3); }
 ;
 
 ExB:
     Term                                        { $$ = $1; }
-    | ExB Opr ExB                               { $$ = nodeChildren($2, $1, $3); }
-    | VRAI                                      { $$ = $1; }
-    | FAUX                                      { $$ = $1; }
+    | NOT ExB                                   { $$ = nodeChildren($1, createNode(NTEMPTY), $2); }
+    | OP_PAR ExB OU ExB CL_PAR                  { $$ = nodeChildren($3, $2, $4); }
+    | OP_PAR ExB ET ExB CL_PAR                  { $$ = nodeChildren($3, $2, $4); }
 ;
 
 %%
@@ -115,6 +120,7 @@ int main(int arc, char **argv) {
         }      
         yyin=fp;
         yyparse();
+        
     }
     exit(0);
 }

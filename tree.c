@@ -42,14 +42,27 @@ const char* node2String(Node *node) {
         case NTMULT:    return "NTMULT";
         case NTDIV:     return "NTDIV";
         case NTPOW:     return "NTPOW";
-        case NTEGAL:    return "NTEGAL";
+        
+        case NTAFF:     return "NTAFF";
         case NTDISPLAY: return "NTDISPLAY";
+        
         case NTSI:      return "NTSI";
         case NTALORS:   return "NTALORS";
         case NTSINON:   return "NTSINON";
         case NTTANTQUE: return "NTTANTQUE";
         case NTFAIRE:   return "NTFAIRE";
         case NTFIN:     return "NTFIN";
+        
+        case NTNOT:     return "NTNOT";
+        case NTEQUAL:   return "NTEQUAL";
+        case NTNEQUAL:  return "NTNEQUAL";
+        case NTGT:      return "NTGT";
+        case NTLT:      return "NTLT";
+        case NTGET:     return "NTGET";
+        case NTLET:     return "NTLET";
+        case NTOU:      return "NTOU";
+        case NTET:      return "NTET";
+        
         case NTVRAI:    return "NTVRAI";
         case NTFAUX:    return "NTFAUX";
 
