@@ -48,12 +48,19 @@ FAIRE { yylval.node = createNode(NTFAIRE); return (FAIRE); }
 VRAI { yylval.node = createNode(NTVRAI); return (VRAI); }
 FAUX { yylval.node = createNode(NTFAUX); return (FAUX); }
 
+INT { yylval.node = createNode(NTINT); return (INT); }
+FLOAT { yylval.node = createNode(NTFLOAT); return (FLOAT); }
+CHAR { yylval.node = createNode(NTCHAR); return (CHAR); }
+DOUBLE { yylval.node = createNode(NTDOUBLE); return (DOUBLE); }
+STRING { yylval.node = createNode(NTSTRING); return (STRING); }
+
 "+"   { yylval.node = createNode(NTPLUS); return(PLUS); }
 "-"   { yylval.node = createNode(NTMIN); return(MIN); }
 "*"   { yylval.node = createNode(NTMULT); return(MULT); }
 "/"   { yylval.node = createNode(NTDIV); return(DIV); }
 "^"   { yylval.node = createNode(NTPOW); return(POW); }
 "="   { yylval.node = createNode(NTAFF); return(AFF); }
+
 "!"   { yylval.node = createNode(NTNOT); return (NOT); }
 "=="  { yylval.node = createNode(NTEQUAL); return (EQUAL); }
 "!="  { yylval.node = createNode(NTNEQUAL); return (NEQUAL); }
@@ -63,7 +70,9 @@ FAUX { yylval.node = createNode(NTFAUX); return (FAUX); }
 "<="  { yylval.node = createNode(NTLET); return (LET); }
 "OU"  { yylval.node = createNode(NTOU); return (OU); }
 "ET"  { yylval.node = createNode(NTET); return (ET); }
+
 "++"  { yylval.node = createNode(NTPLUSPLUS); return(PLUSPLUS); }
+
 ";"    { return(COLON); }
 
 "\n"   { return(EOL); }

@@ -43,6 +43,12 @@ const char* node2String(Node *node) {
         case NTDIV:     return "NTDIV";
         case NTPOW:     return "NTPOW";
         
+        case NTINT:     return "NTINT";
+        case NTFLOAT:   return "NTFLOAT";
+        case NTCHAR:    return "NTCHAR";
+        case NTDOUBLE:  return "NTDOUBLE";
+        case NTSTRING:  return "NTSTRING";
+        
         case NTAFF:     return "NTAFF";
         case NTPLUSPLUS:return "NTPLUSPLUS";
         case NTDISPLAY: return "NTDISPLAY";

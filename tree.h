@@ -9,6 +9,12 @@ enum NodeType {
     NTVAR   = 202,
     
     NTDISPLAY = 203,
+    
+    NTINT   = 310,
+    NTFLOAT = 311,
+    NTCHAR  = 312,
+    NTDOUBLE = 313,
+    NTSTRING = 314,
 
     NTPLUS  = 321,
     NTMIN   = 322,

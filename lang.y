@@ -23,8 +23,8 @@ Node root;
 %token   <node> OU ET
 %token   <node> DISPLAY SI ALORS SINON
 %token   <node> POUR TANTQUE FAIRE FIN
-%token   OP_PAR CL_PAR COLON
 %token   <node> VRAI FAUX
+%token   OP_PAR CL_PAR COLON
 %token   EOL
 
 %type   <node> Instlist
@@ -33,16 +33,19 @@ Node root;
 %type   <node> ExB
 %type   <node> Term
 %type   <node> Incr
+%type   <node> Type
 
-%left OU			// OU Logique
-%left ET			// ET Logique
-%left EQUAL NEQUAL              // ==  et !=
-%left GT LT GET LET             // > , < , >= et <=
-%left PLUS  MIN			// + et -
-%left MULT  DIV                 // * et /
-%left NEG NOT			// - unaire et !
-%right POW			// ^ (puissance)
-%right PLUSPLUS                 // ++ (incrémentation)
+%left INT FLOAT CHAR DOUBLE STRING  // Les noms de types pour la déclaration de variables.
+%left AFF                           // =
+%left OU                            // OU Logique
+%left ET                            // ET Logique
+%left EQUAL NEQUAL                  // ==  et !=
+%left GT LT GET LET                 // > , < , >= et <=
+%left PLUS  MIN                     // + et -
+%left MULT  DIV                     // * et /
+%left NEG NOT                       // - unaire et !
+%right POW                          // ^ (puissance)
+%right PLUSPLUS                     // ++ (incrémentation)
 
 %start Input
 %%
@@ -66,6 +69,7 @@ Inst:
     Expr COLON                                          { $$ = $1; }
     | DISPLAY OP_PAR Expr CL_PAR COLON                  { $$ = nodeChildren($1, createNode(NTEMPTY), $3); }
     | VAR AFF Expr COLON                                { $$ = nodeChildren($2, $1, $3); }
+    | Type VAR AFF Expr COLON                           { $$ = nodeChildren($1, createNode(NTEMPTY), nodeChildren($3, $2, $4) ); }
     | SI ExB ALORS Instlist FIN COLON                   { $$ = nodeChildren($1, $2, $4); }
     | SI ExB ALORS Instlist SINON Instlist FIN COLON    { $$ = nodeChildren($5, nodeChildren($1, $2, $4), $6); }
     | POUR VAR AFF Expr COLON ExB COLON Incr FAIRE Instlist FIN COLON { $$ = nodeChildren($1, nodeChildren($3, $2, $4), nodeChildren($9, $6, nodeChildren(createNode(NTEMPTY), $8, $10) ) ); }
@@ -73,8 +77,16 @@ Inst:
     | Incr                                              { $$ = $1; }
 ;
 
+Type:
+    INT                                         { $$ = $1; }
+    | FLOAT                                     { $$ = $1; }
+    | CHAR                                      { $$ = $1; }
+    | DOUBLE                                    { $$ = $1; }
+    | STRING                                    { $$ = $1; }
+;
+
 Incr:
-    VAR PLUSPLUS COLON                                  { $$ = nodeChildren($2, createNode(NTEMPTY), $1); }
+    VAR PLUSPLUS COLON                          { $$ = nodeChildren($2, createNode(NTEMPTY), $1); }
 ;
 
 Expr:
@@ -87,14 +99,6 @@ Expr:
     | MIN Expr %prec NEG 			{ $$ = nodeChildren($1, createNode(NTEMPTY), $2); }
     | Expr POW Expr      			{ $$ = nodeChildren($2, $1, $3); }
     | OP_PAR Expr CL_PAR                        { $$ = $2; }
-;
-
-Type:
-    INT
-    | FLOAT
-    | CHAR
-    | DOUBLE
-    | STRING
 ;
 
 Term:
@@ -128,37 +132,13 @@ int yyerror(char *s) {
 } 
 
 int main(int arc, char **argv) {
-int choix = -1;
-/*
-while (choix != 0) {
-    printf("Choisissez\n");
-    scanf("%d",&choix);
-    switch (choix) {
-        case 1:
-            printf("Saisissez une instruction\n");
-            while (strcmp(stdin, "EXIT") != 0) {
-                printf("Ici %s\n",stdin);
-                if (yyparse()) {
-                    printf("Ici 2 %s\n",stdin);
-                }
-                
-            }
-            break;
-        case 2:
-            printf("Fichier\n");
-            break;
-        case 0:
-            exit(0);
-        default :
-            printf("Choix non reconnu\n");
-            break;
-    }
-}*/
 
-
+    FILE * fp = NULL;
 
     if ( (arc == 3) && (strcmp(argv[1], "-f") == 0) ) {
-        FILE * fp = fopen( argv[2], "r" );
+        fp = fopen( argv[2], "r" );
+    }
+    if ( fp != NULL ) {
         yyin = fp;
         yyparse();
     }

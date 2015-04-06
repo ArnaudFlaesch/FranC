@@ -90,6 +90,14 @@ int evalInst(Node* node) {
             tab = tabVariable_append(tab, node->children[1]->var, valeur );
             return;
             
+        case NTINT:
+        case NTFLOAT:
+        case NTCHAR:
+        case NTDOUBLE:
+        case NTSTRING:
+            printf("%.2f\n",evalExpr(node));
+            return;
+        
         case NTAFF:
             valeur = evalExpr(node->children[1]);
             printf("%s égal %.2f\n",(node->children[0]->var), valeur);
