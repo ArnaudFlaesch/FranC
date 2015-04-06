@@ -68,7 +68,7 @@ int evalExpB(Node* node) {
  * Cette fonction peut renvoyer un 0 ou un 1 si elle rencotre un NTSI pour dire si la condition du SI est vraie et donc ne pas exécuter le SINON.
  */
 int evalInst(Node* node) {
-    double val;
+
     switch ( node->type ) {
 	case NTEMPTY: return;
 	case NTINSTLIST:

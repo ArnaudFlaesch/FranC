@@ -129,7 +129,7 @@ int exec(Node *node) {
 
 int yyerror(char *s) {
   printf("%s\n", s);
-} 
+}
 
 int main(int arc, char **argv) {
 

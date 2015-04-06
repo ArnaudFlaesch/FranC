@@ -6,14 +6,6 @@ typedef struct tabVariable {
     char * variable;
     struct tabVariable * next;
 }tabVariable;
-/*
-enum varType {
-    INT = 1,
-    FLOAT = 2,
-    CHAR = 3,
-    DOUBLE = 4,
-    STRING = 5     
-};*/
 
 void eval(Node *node);
 
